@@ -9,14 +9,20 @@ mkdir -p $NOTES_DIR
 # Define file
 NOTES_FILE=$NOTES_DIR/001.txt
 
+# Define temp file
+NOTES_FILE_TEMP=$NOTES_DIR/001_temp.txt
+
 # Delimiter between title and info
 DELIMITER="-"
 
 # Print help messages
 function print_help {
     echo "Welcome to term-notes..."
-    echo "Usage: $0 [-c] [-h]"
-    echo "-c      Specify if u want to create a note"
+    echo "Usage: notes [-c] [-l] [-g <title>] [-d <title>] [-h] "
+    echo "-c      Create a note"
+    echo "-l      List all notes"
+    echo "-g      Get info of note title"
+    echo "-d      Delete a note title"
     echo "-h      Display this help message"
 }
 
@@ -43,15 +49,40 @@ function list_all_notes {
 
 # Get title's info
 function get_title_info {
-    awk -F "$DELIMITER" -v title="$1" '{
+    info=$(awk -F "$DELIMITER" -v title=$1 '{
         if ($1 == title) {
-            echo title
+            print $2
+            exit
         }
-    }' "$NOTES_FILE"
+    }' "$NOTES_FILE")
+
+    if [[ -z $info ]]; then
+        echo "Not found title $1"
+    else
+        echo $info
+    fi
+}
+
+# Delete title
+function delete_title {
+    found=$(awk -F "$DELIMITER" -v title=$1 '{
+        if ($1 == title) {
+            print $1
+            exit
+        }
+    }' "$NOTES_FILE")
+
+    if [[ -z $found ]]; then
+        echo "Couldn't find note title $1"
+    else
+        sed "/$found/d" "$NOTES_FILE" > "$NOTES_FILE_TEMP"
+        mv "$NOTES_FILE_TEMP" "$NOTES_FILE"
+        echo "Removed title=$found"
+    fi
 }
 
 # Accept the arguments
-while getopts "hclg:" opt; do
+while getopts "hclg:d:" opt; do
     case $opt in
         h) 
         print_help
@@ -66,6 +97,10 @@ while getopts "hclg:" opt; do
         g) 
         TITLE="$OPTARG"
         get_title_info $TITLE
+        ;;
+        d) 
+        TITLE="$OPTARG"
+        delete_title $TITLE
         ;;
         \*)
         echo "Invalid option: -$OPTARG" >&2
