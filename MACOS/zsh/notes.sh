@@ -90,17 +90,21 @@ while getopts "hclg:d:" opt; do
         ;;
         c) 
         create_note
+        exit 0
         ;;
         l) 
         list_all_notes
+        exit 0
         ;;
         g) 
         TITLE="$OPTARG"
         get_title_info $TITLE
+        exit 0
         ;;
         d) 
         TITLE="$OPTARG"
         delete_title $TITLE
+        exit 0
         ;;
         \*)
         echo "Invalid option: -$OPTARG" >&2
