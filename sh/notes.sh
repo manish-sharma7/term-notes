@@ -1,4 +1,4 @@
-# !/bin/zsh
+# !/bin/sh
 
 # Files where notes will be saved
 NOTES_DIR="$HOME/term-notes/"
