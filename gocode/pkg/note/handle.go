@@ -1,6 +1,7 @@
 package note
 
 import (
+	"bufio"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -99,17 +100,29 @@ func (n Note) updateNote() {
 }
 
 func (n Note) CreateNote() {
+	// Define reader
+	// TODO: Try to set the size here of buffer
+	reader := bufio.NewReader(os.Stdin)
+
 	// Prompt for title
-	fmt.Println("Title >>")
-	var title string
-	fmt.Scan(&title)
-	n.title = title
+	fmt.Print("Title >> ")
+	title, err := reader.ReadString(userInputBreaker)
+	if err != nil {
+		fmt.Println("Couldn't read title, Try again")
+		return
+	}
+	// Remove last character/userInputBreaker
+	n.title = title[:len(title)-1]
 
 	// Prompt for information
-	fmt.Println("Info >>")
-	var info string
-	fmt.Scan(&info)
-	n.info = info
+	fmt.Print("Info >> ")
+	info, err := reader.ReadString(userInputBreaker)
+	if err != nil {
+		fmt.Println("Couldn't read info, Try again")
+		return
+	}
+	// Remove last character/userInputBreaker
+	n.info = info[:len(info)-1]
 
 	// Update ops
 	n.ops = opsCreateNote
@@ -119,17 +132,29 @@ func (n Note) CreateNote() {
 }
 
 func (n Note) UpdateNote() {
+	// Define reader
+	// TODO: Try to set the size here of buffer
+	reader := bufio.NewReader(os.Stdin)
+
 	// Prompt for title
-	fmt.Println("Title >>")
-	var title string
-	fmt.Scan(&title)
-	n.title = title
+	fmt.Print("Title >> ")
+	title, err := reader.ReadString(userInputBreaker)
+	if err != nil {
+		fmt.Println("Couldn't read title, Try again")
+		return
+	}
+	// Remove last character/userInputBreaker
+	n.title = title[:len(title)-1]
 
 	// Prompt for information
-	fmt.Println("New Info >>")
-	var info string
-	fmt.Scan(&info)
-	n.info = info
+	fmt.Print("Info >> ")
+	info, err := reader.ReadString(userInputBreaker)
+	if err != nil {
+		fmt.Println("Couldn't read info, Try again")
+		return
+	}
+	// Remove last character/userInputBreaker
+	n.info = info[:len(info)-1]
 
 	// Update ops
 	n.ops = opsUpdateNote
@@ -138,8 +163,21 @@ func (n Note) UpdateNote() {
 	n.updateNote()
 }
 
-func (n Note) DeleteNote(title string) {
-	n.title = title
+func (n Note) DeleteNote() {
+	// Define reader
+	// TODO: Try to set the size here of buffer
+	reader := bufio.NewReader(os.Stdin)
+
+	// Prompt for title
+	fmt.Print("Title >> ")
+	title, err := reader.ReadString(userInputBreaker)
+	if err != nil {
+		fmt.Println("Couldn't read title, Try again")
+		return
+	}
+	// Remove last character/userInputBreaker
+	n.title = title[:len(title)-1]
+
 	// Set ops to delete
 	n.ops = opsRemoveNote
 
@@ -147,7 +185,21 @@ func (n Note) DeleteNote(title string) {
 	n.updateNote()
 }
 
-func (n Note) GetInfo(title string) {
+func (n Note) GetInfo() {
+	// Define reader
+	// TODO: Try to set the size here of buffer
+	reader := bufio.NewReader(os.Stdin)
+
+	// Prompt for title
+	fmt.Print("Title >> ")
+	title, err := reader.ReadString(userInputBreaker)
+	if err != nil {
+		fmt.Println("Couldn't read title, Try again")
+		return
+	}
+	// Remove last character/userInputBreaker
+	title = title[:len(title)-1]
+
 	// Read note file
 	lines := n.readFile()
 	for _, line := range lines {

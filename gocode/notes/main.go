@@ -25,9 +25,9 @@ func main() {
 	// Parse input flags
 	create := flag.Bool("c", false, "Create a note")
 	list := flag.Bool("l", false, "List all notes")
-	get := flag.String("g", "", "Get information for a note")
+	get := flag.Bool("g", false, "Get information for a note")
 	update := flag.Bool("u", false, "Update a note")
-	del := flag.String("d", "", "Delete a note")
+	del := flag.Bool("d", false, "Delete a note")
 	help := flag.Bool("h", false, "Display help message")
 	flag.Parse()
 
@@ -64,12 +64,12 @@ func main() {
 		note.CreateNote()
 	} else if *list {
 		note.ListNotes()
-	} else if *get != "" {
-		note.GetInfo(*get)
+	} else if *get {
+		note.GetInfo()
 	} else if *update {
 		note.UpdateNote()
-	} else if *del != "" {
-		note.DeleteNote(*del)
+	} else if *del {
+		note.DeleteNote()
 	} else {
 		fmt.Println("Invalid flag")
 		PrintHelp()
