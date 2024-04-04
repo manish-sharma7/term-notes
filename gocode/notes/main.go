@@ -11,7 +11,7 @@ import (
 func PrintHelp() {
 	fmt.Print(
 		"Welcome to term-notes, Smart way to store your notes in terminal... \n",
-		"Usage: notes [-c] [-l] [-g <title>] [-u] [-d <title>] [-h] \n",
+		"Usage: notes [-c] [-l] [-g] [-u] [-d] [-h] \n",
 		"-c      Create a note \n",
 		"-l      List all notes \n",
 		"-g      Get info of note \n",
