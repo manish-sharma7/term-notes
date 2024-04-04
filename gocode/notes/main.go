@@ -5,27 +5,20 @@ import (
 	"TermNotes/pkg/note"
 	"flag"
 	"fmt"
-	"io"
 	"os"
 )
 
 func PrintHelp() {
-	// Open the helper file
-	fileReader, err := os.Open(helperFile)
-	if err != nil {
-		fmt.Println("Error opening ", helperFile, " : ", err)
-		return
-	}
-
-	// Read the helper file
-	data, err := io.ReadAll(fileReader)
-	if err != nil {
-		fmt.Println("Error reading ", helperFile, " : ", err)
-		return
-	}
-
-	// Print the content
-	fmt.Println(string(data))
+	fmt.Print(
+		"Welcome to term-notes, Smart way to store your notes in terminal... \n",
+		"Usage: notes [-c] [-l] [-g <title>] [-u] [-d <title>] [-h] \n",
+		"-c      Create a note \n",
+		"-l      List all notes \n",
+		"-g      Get info of note \n",
+		"-u      Update a note \n",
+		"-d      Delete a note \n",
+		"-h      Display this help message\n",
+	)
 }
 
 func main() {
