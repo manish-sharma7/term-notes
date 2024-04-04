@@ -215,6 +215,11 @@ func (n Note) GetInfo() {
 func (n Note) ListNotes() {
 	// Read note file
 	lines := n.readFile()
+
+	if len(lines) == 0 {
+		fmt.Println("No note available")
+	}
+
 	for _, line := range lines {
 		if line != "" {
 			fmt.Println(strings.Split(line, delimiter)[0])
