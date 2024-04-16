@@ -26,7 +26,7 @@ func (n Note) readFile() []string {
 	data, err := os.ReadFile(n.filePath)
 	if err != nil {
 		if !os.IsNotExist(err) {
-			fmt.Println("Error reading notes : ", err)
+			fmt.Println("Error reading notes :", err)
 			os.Exit(1)
 		} else {
 			return lines
@@ -42,7 +42,7 @@ func (n Note) writeFile(lines []string) error {
 	// TODO: Understand permission modes and Support to take it from user
 	f, err := os.OpenFile(n.filePath, os.O_WRONLY|os.O_TRUNC|os.O_CREATE, 0644)
 	if err != nil {
-		fmt.Println("Error opening file : ", err)
+		fmt.Println("Error opening file :", err)
 		fmt.Println("Can't update the note in database, try again")
 		return err
 	}
@@ -52,7 +52,7 @@ func (n Note) writeFile(lines []string) error {
 	for _, line := range lines {
 		_, err = f.Write([]byte(line))
 		if err != nil {
-			fmt.Println("Error writing to file : ", err, " for note : ", n.title)
+			fmt.Println("Error writing to file :", err, "for note :", n.title)
 			return err
 		}
 	}
@@ -63,12 +63,24 @@ func (n Note) updateNote() {
 	// Read the note file
 	lines := n.readFile()
 
+	// Flag to know if title already exist
+	exist := false
+
 	// Get the Updated lines without current title
 	var updatedLines []string
 	for _, line := range lines {
-		if line != "" && !strings.HasPrefix(line, n.title+delimiter) {
-			updatedLines = append(updatedLines, line+"\n")
+		if line != "" {
+			if !strings.HasPrefix(line, n.title+delimiter) {
+				updatedLines = append(updatedLines, line+"\n")
+			} else {
+				exist = true
+			}
 		}
+	}
+
+	if n.ops == opsRemoveNote && !exist {
+		fmt.Println("Note not found for deletion")
+		return
 	}
 
 	if n.ops == opsCreateNote || n.ops == opsUpdateNote {
@@ -82,13 +94,21 @@ func (n Note) updateNote() {
 		if err != nil {
 			fmt.Println("Note creation failed")
 		} else {
-			fmt.Println("Note created")
+			if exist {
+				fmt.Println("Note updated")
+			} else {
+				fmt.Println("Note created")
+			}
 		}
 	} else if n.ops == opsUpdateNote {
 		if err != nil {
 			fmt.Println("Note update failed")
 		} else {
-			fmt.Println("Note updated")
+			if exist {
+				fmt.Println("Note updated")
+			} else {
+				fmt.Println("Note created")
+			}
 		}
 	} else if n.ops == opsRemoveNote {
 		if err != nil {
@@ -112,7 +132,18 @@ func (n Note) CreateNote() {
 		return
 	}
 	// Remove last character/userInputBreaker
-	n.title = title[:len(title)-1]
+	title = title[:len(title)-1]
+
+	// Remove any leading or trailing whitespaces
+	title = strings.TrimSpace(title)
+
+	// Return on empty title
+	if len(title) == 0 {
+		fmt.Println("title can't be empty to create")
+		return
+	}
+
+	n.title = title
 
 	// Prompt for information
 	fmt.Print("Info >> ")
@@ -122,7 +153,10 @@ func (n Note) CreateNote() {
 		return
 	}
 	// Remove last character/userInputBreaker
-	n.info = info[:len(info)-1]
+	info = info[:len(info)-1]
+
+	// Remove any leading or trailing whitespaces
+	n.info = strings.TrimSpace(info)
 
 	// Update ops
 	n.ops = opsCreateNote
@@ -144,7 +178,18 @@ func (n Note) UpdateNote() {
 		return
 	}
 	// Remove last character/userInputBreaker
-	n.title = title[:len(title)-1]
+	title = title[:len(title)-1]
+
+	// Remove any leading or trailing whitespaces
+	title = strings.TrimSpace(title)
+
+	// Return on empty title
+	if len(title) == 0 {
+		fmt.Println("title can't be empty to update")
+		return
+	}
+
+	n.title = title
 
 	// Prompt for information
 	fmt.Print("Info >> ")
@@ -154,7 +199,10 @@ func (n Note) UpdateNote() {
 		return
 	}
 	// Remove last character/userInputBreaker
-	n.info = info[:len(info)-1]
+	info = info[:len(info)-1]
+
+	// Remove any leading or trailing whitespaces
+	n.info = strings.TrimSpace(info)
 
 	// Update ops
 	n.ops = opsUpdateNote
@@ -176,7 +224,18 @@ func (n Note) DeleteNote() {
 		return
 	}
 	// Remove last character/userInputBreaker
-	n.title = title[:len(title)-1]
+	title = title[:len(title)-1]
+
+	// Remove any leading or trailing whitespaces
+	title = strings.TrimSpace(title)
+
+	// Return on empty title
+	if len(title) == 0 {
+		fmt.Println("title can't be empty to delete")
+		return
+	}
+
+	n.title = title
 
 	// Set ops to delete
 	n.ops = opsRemoveNote
@@ -185,6 +244,20 @@ func (n Note) DeleteNote() {
 	n.updateNote()
 }
 
+func (n Note) DeleteNoteFile() {
+	err := os.Remove(n.filePath)
+	if err != nil {
+		if !os.IsNotExist(err) {
+			fmt.Println("Not able to delete all notes")
+		} else {
+			fmt.Println("No note found to delete")
+		}
+	} else {
+		fmt.Println("Deleted all notes")
+	}
+}
+
+// TODO: This should be able to take more than one title to give info out
 func (n Note) GetInfo() {
 	// Define reader
 	// TODO: Try to set the size here of buffer
@@ -209,10 +282,10 @@ func (n Note) GetInfo() {
 			return
 		}
 	}
-	fmt.Println("Note ", title, " not found")
+	fmt.Println(title, ">> Title not found")
 }
 
-func (n Note) ListNotes() {
+func (n Note) ListNotes(includeInfo bool) {
 	// Read note file
 	lines := n.readFile()
 
@@ -222,7 +295,11 @@ func (n Note) ListNotes() {
 
 	for _, line := range lines {
 		if line != "" {
-			fmt.Println(strings.Split(line, delimiter)[0])
+			if includeInfo {
+				fmt.Println(strings.Split(line, delimiter)[0], ">>>", strings.Split(line, delimiter)[1])
+			} else {
+				fmt.Println(strings.Split(line, delimiter)[0])
+			}
 		}
 	}
 }
