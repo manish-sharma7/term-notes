@@ -13,6 +13,7 @@ runs:
       run: |
         cd gocode/notes
         go build
+        chmod +x notes
     # - name: Build tag
     #   shell: bash
     #   run: |
