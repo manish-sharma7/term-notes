@@ -2,7 +2,7 @@
 ### Terminal Notes
 Welcome to term-notes, Smart way to store your notes in terminal...
 
-Usage: notes [-c] [-l] [-li] [-g] [-u] [-d] [-h]
+Usage: notes [-c] [-l] [-li] [-g] [-u] [-d] [-da] [-h]
 
 | flag     | Description                  |
 | -------- | ---------------------------- |
