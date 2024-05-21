@@ -26,10 +26,4 @@ runs:
         files: ./gocode/notes/notes
         tag_name: ${{ env.BUILD_TAG }}
         name: Release ${{ env.BUILD_TAG }}
-
-# TODO: 
-# - name: Release to GitHub Packages
-#   uses: actions/upload-artifact@v3
-#   with:
-#     name: $BUILD_TAG
-#     path: ./gocode/notes/notes
+        body: notes version ${{ env.BUILD_TAG }}
