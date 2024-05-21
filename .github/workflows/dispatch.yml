@@ -14,8 +14,8 @@ jobs:
       - name: Store build tag as environment variable
         run: |
           echo "BUILD_TAG=${{ github.event.inputs.build_tag }}"
-          echo "::set-env name=BUILD_TAG::$BUILD_TAG"
-      - name: Run Go build and tag workflow
+          echo "BUILD_TAG=${{ github.event.inputs.build_tag }}" >> "$GITHUB_ENV"
+      - name: Run Golang build and tag workflow
         uses: ./github/workflows/go/build
         with:
           BUILD_TAG: ${{ env.BUILD_TAG }}
