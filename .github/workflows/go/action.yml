@@ -9,10 +9,12 @@ runs:
       with:
         go-version: '^1.19' # TODO: Take the go version as part of Environment available
     - name: Build project
+      shell: bash
       run: |
         cd gocode/notes
         go build
     - name: Build tag
+      shell: bash
       run: |
         git config user.name "GitHub Actions"
         git config user.email "actions@github.com"
