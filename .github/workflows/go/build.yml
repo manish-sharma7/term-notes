@@ -1,0 +1,34 @@
+name: Build, Tag, and Release
+
+jobs:
+  build-and-tag:
+    runs-on: ubuntu-latest # TODO: centOS, macOS etc
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Go environment
+        uses: actions/setup-go@v3
+        with:
+          go-version: '^1.19' # TODO: Take the go version as part of Environment available
+      - name: Build project
+        run: |
+          cd gocode/notes
+          go build
+      - name: Build tag
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git tag ${{ env.BUILD_TAG }} -m "Tag ${{ env.BUILD_TAG }}"
+          git push origin ${{ env.BUILD_TAG }}
+
+# - name: Release to GitHub Packages
+#   uses: actions/upload-artifact@v3
+#   with:
+#     name: ${{ env.BUILD_TAG }}
+#     path: ./gocode/notes/notes
+
+- name: Create a Release
+  uses: softprops/action-gh-release@v1
+  with:
+    files: ./gocode/notes/notes
+    tag_name: ${{ env.BUILD_TAG }}
+    name: Release ${{ env.BUILD_TAG }}

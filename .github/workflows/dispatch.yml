@@ -1,0 +1,21 @@
+name: Dispatch Workflow
+
+on:
+  workflow_dispatch:
+    inputs:
+      build_tag:
+        description: 'Enter the build tag'
+        required: true
+
+jobs:
+  dispatch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Store build tag as environment variable
+        run: |
+          echo "BUILD_TAG=${{ github.event.inputs.build_tag }}"
+          echo "::set-env name=BUILD_TAG::$BUILD_TAG"
+      - name: Run Go build and tag workflow
+        uses: ./github/workflows/go/build
+        with:
+          BUILD_TAG: ${{ env.BUILD_TAG }}
