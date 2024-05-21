@@ -17,18 +17,18 @@ jobs:
         run: |
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
-          git tag ${{ env.BUILD_TAG }} -m "Tag ${{ env.BUILD_TAG }}"
-          git push origin ${{ env.BUILD_TAG }}
+          git tag $BUILD_TAG -m "Tag $BUILD_TAG"
+          git push origin $BUILD_TAG
 
 # - name: Release to GitHub Packages
 #   uses: actions/upload-artifact@v3
 #   with:
-#     name: ${{ env.BUILD_TAG }}
+#     name: $BUILD_TAG
 #     path: ./gocode/notes/notes
 
 - name: Create a Release
   uses: softprops/action-gh-release@v1
   with:
     files: ./gocode/notes/notes
-    tag_name: ${{ env.BUILD_TAG }}
-    name: Release ${{ env.BUILD_TAG }}
+    tag_name: $BUILD_TAG
+    name: Release $BUILD_TAG
