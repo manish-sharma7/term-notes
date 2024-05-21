@@ -19,16 +19,16 @@ jobs:
           git config user.email "actions@github.com"
           git tag $BUILD_TAG -m "Tag $BUILD_TAG"
           git push origin $BUILD_TAG
+      - name: Create a Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: ./gocode/notes/notes
+          tag_name: $BUILD_TAG
+          name: Release $BUILD_TAG
 
+# TODO: 
 # - name: Release to GitHub Packages
 #   uses: actions/upload-artifact@v3
 #   with:
 #     name: $BUILD_TAG
 #     path: ./gocode/notes/notes
-
-- name: Create a Release
-  uses: softprops/action-gh-release@v1
-  with:
-    files: ./gocode/notes/notes
-    tag_name: $BUILD_TAG
-    name: Release $BUILD_TAG
