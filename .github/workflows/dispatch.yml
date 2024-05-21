@@ -12,11 +12,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - uses: ./github/workflows/go/
       - name: Store build tag as environment variable
         run: |
           echo "BUILD_TAG=${{ github.event.inputs.build_tag }}"
           echo "BUILD_TAG=${{ github.event.inputs.build_tag }}" >> "$GITHUB_ENV"
       - name: Run Golang build and tag workflow
-        uses: ./github/workflows/go/
+        uses: ./github/workflows/go/build
         with:
           BUILD_TAG: ${{ env.BUILD_TAG }}
