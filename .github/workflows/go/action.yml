@@ -20,12 +20,12 @@ runs:
         git config user.email "actions@github.com"
         git tag $BUILD_TAG -m "Tag $BUILD_TAG"
         git push origin $BUILD_TAG
-    - name: Create a Release
-      uses: softprops/action-gh-release@v1
-      with:
-        files: ./gocode/notes/notes
-        tag_name: ${{ env.BUILD_TAG }}
-        name: Release ${{ env.BUILD_TAG }}
+    # - name: Create a Release
+    #   uses: softprops/action-gh-release@v1
+    #   with:
+    #     files: ./gocode/notes/notes
+    #     tag_name: ${{ env.BUILD_TAG }}
+    #     name: Release ${{ env.BUILD_TAG }}
 
 # TODO: 
 # - name: Release to GitHub Packages
