@@ -17,6 +17,6 @@ jobs:
           echo "BUILD_TAG=${{ github.event.inputs.build_tag }}"
           echo "BUILD_TAG=${{ github.event.inputs.build_tag }}" >> "$GITHUB_ENV"
       - name: Run Golang build and tag workflow
-        uses: ./github/workflows/go/build
+        uses: ./github/workflows/go/
         with:
           BUILD_TAG: ${{ env.BUILD_TAG }}
