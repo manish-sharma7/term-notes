@@ -10,20 +10,32 @@ import (
 
 func PrintHelp() {
 	fmt.Print(
-		"Welcome to term-notes, Smart way to store your notes in terminal... \n",
-		"Usage: notes [-c] [-l] [-g] [-u] [-d] [-da] [-h] \n",
-		"-c      Create a note \n",
-		"-l      List all notes \n",
-		"-li     List all notes with info\n",
-		"-g      Get info of note \n",
-		"-u      Update a note \n",
-		"-d      Delete a note \n",
-		"-da     Delete all notes \n",
-		"-h      Display this help message\n",
+		"Welcome to term-notes, Smart way to manage your notes/commands in terminal... \n",
+		"Usage: notes [MODE] OPTION \n",
+		"Modes: \n",
+		"  --normal    for normal text notes (Applicable for all OPTION) \n",
+		"  --command   for executable commands (Applicable for all OPTION) \n",
+		"  --all       for all text notes and executable commands (Applicable for only Get, Delete OPTION) \n",
+		"Option: \n",
+		"  Create: \n",
+		"      -c      Create a note/command \n",
+		"      -u      Update a note/command \n",
+		"  Get: \n",
+		"      -l      List all notes/commands \n",
+		"      -li     List all notes/commands with info \n",
+		"      -g      Get info of a note/command \n",
+		"  Delete: \n",
+		"      -d      Delete a note/command \n",
+		"      -da     Delete all notes/commands \n",
+		"  Help: \n",
+		"      -h      Display this help message \n",
 	)
 }
 
 func main() {
+	// Define usage function
+	flag.Usage = PrintHelp
+
 	// Parse input flags
 	create := flag.Bool("c", false, "Create a note")
 	list := flag.Bool("l", false, "List all notes")
