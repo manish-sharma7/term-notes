@@ -13,7 +13,7 @@ func PrintHelp() {
 		"Welcome to term-notes, Smart way to manage your notes/commands in terminal... \n",
 		"Usage: notes [MODE] OPTION \n",
 		"Modes: \n",
-		"  --normal    for normal text notes (Applicable for all OPTION) \n",
+		"  --normal    for normal text notes (Applicable for all OPTION) [DEFAULT IN CASE MODE NOT PROVIDED]\n",
 		"  --command   for executable commands (Applicable for all OPTION) \n",
 		"  --all       for all text notes and executable commands (Applicable for only Get, Delete OPTION) \n",
 		"Option: \n",
